@@ -1,0 +1,3 @@
+from .simplex_projected_adam import SimplexProjectedAdam
+from .simplex_projected_gradient_descent import SimplexProjectedGradientDescent
+from .simplex_projected_sagd import SimplexProjectedSAGD
