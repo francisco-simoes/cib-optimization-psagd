@@ -102,7 +102,7 @@ def create_parser(defaults: dict[str, Any]):
         "--experiment_name",
         type=str,
         default=defaults["experiment_name"],
-        help=f"Suffix for run name (default: '{defaults['experiment_name']}')",
+        help=f"MLflow experiment name (default: '{defaults['experiment_name']}')",
     )
     parser.add_argument(
         "--suffix",

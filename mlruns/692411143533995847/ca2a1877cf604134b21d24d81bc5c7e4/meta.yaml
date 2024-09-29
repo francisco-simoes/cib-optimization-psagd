@@ -4,7 +4,7 @@ entry_point_name: ''
 experiment_id: '692411143533995847'
 lifecycle_stage: active
 run_id: ca2a1877cf604134b21d24d81bc5c7e4
-run_name: gamma=0.4--ry=0.1
+run_name: gamma=0.4--uy=0.0
 run_uuid: ca2a1877cf604134b21d24d81bc5c7e4
 source_name: ''
 source_type: 4

@@ -4,20 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-torch = "*"
-# pgd-optim-pytorch = {path = "."}
-pgd-optim = {editable = true, path = "."}
-numpy = "==1.26.0"
-mlflow = "*"
-click = "*"
-joblib = "*"
-pgmpy = "*"
-jupyterlab = "*"
-pygraphviz = "*"
-seaborn = "*"
-plotly = "*"
-kaleido = "*"
-gunicorn = "*"
+pgd-optim-pytorch = {path = "."}
 
 [dev-packages]
 pretty-errors = "*"

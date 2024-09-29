@@ -3,7 +3,7 @@
 /.mypy_cache
 /cib_optimization/_experiments_log.org
 /cib_optimization/.mypy_cache
-/cib_optimization/__pycache__
 /build
 **/*.egg-info
 **/.ipynb_checkpoints/
+**/__pycache__/
