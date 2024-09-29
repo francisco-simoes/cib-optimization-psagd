@@ -1,0 +1,15 @@
+artifact_uri: file:///home/fsimoes/Documents/Code/CRL/pgd-optim-pytorch/mlruns/278804475068106160/4c2f2e2ffb04462594a281c2f237899f/artifacts
+end_time: 1727277280970
+entry_point_name: ''
+experiment_id: '278804475068106160'
+lifecycle_stage: active
+run_id: 4c2f2e2ffb04462594a281c2f237899f
+run_name: gamma=1.0--bxi=0.3,by=0.1,bs=0.5
+run_uuid: 4c2f2e2ffb04462594a281c2f237899f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727277241972
+status: 3
+tags: []
+user_id: fsimoes

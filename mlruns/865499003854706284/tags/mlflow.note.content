@@ -1,0 +1,3 @@
+Hyperparameter search for the pSAGD optimizer and CIB Lagrangian.
+The search is over the hyperparameters temperature and learning rate (lr).
+For each pair (temperature, lr) we ran pSAGD 100 times.

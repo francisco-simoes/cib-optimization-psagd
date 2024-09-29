@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/865499003854706284/5aacad0b20a94f3c87cfb5a9c43262c0/artifacts
+end_time: 1726432754599
+entry_point_name: ''
+experiment_id: '865499003854706284'
+lifecycle_stage: active
+run_id: 5aacad0b20a94f3c87cfb5a9c43262c0
+run_name: gamma=1.0--ry=0.1
+run_uuid: 5aacad0b20a94f3c87cfb5a9c43262c0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726432707987
+status: 3
+tags: []
+user_id: fsimoes
