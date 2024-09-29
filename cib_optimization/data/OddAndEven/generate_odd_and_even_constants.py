@@ -3,7 +3,7 @@
 import os
 import sys
 
-# Add the tests path to the Python path, to make use of _conversion_utils
+# Add the tests path to the Python path, to make use of _probability_utils
 tests_dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.append(tests_dir_path)
 
@@ -12,7 +12,7 @@ from typing import Any
 
 import numpy as np
 import torch
-from _conversion_utils import conditionals, rvs_einsum
+from _probability_utils import conditionals, rvs_einsum
 from torch import Tensor
 
 

@@ -5,7 +5,9 @@ name = "pypi"
 
 [packages]
 torch = "*"
-numpy = "*"
+# pgd-optim-pytorch = {path = "."}
+pgd-optim = {editable = true, path = "."}
+numpy = "==1.26.0"
 mlflow = "*"
 click = "*"
 joblib = "*"
@@ -19,7 +21,7 @@ gunicorn = "*"
 
 [dev-packages]
 pretty-errors = "*"
-# pgd_optim_pytorch = {editable = true, path = "."}
+pgd_optim_pytorch = {editable = true, path = "."}
 ipdb = "*"
 jupyterlab-vim = "*"
 

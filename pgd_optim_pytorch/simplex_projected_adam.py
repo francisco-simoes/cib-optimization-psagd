@@ -18,9 +18,12 @@ from torch.optim.optimizer import required
 
 
 class SimplexProjectedAdam(Adam):
-    """"""
+    """pAdam optimizer for simplex constraint space.
 
-    # TODO: understand each argument of Adam's init; delete unnecessary ones
+    Performs an Adam step followed by projection onto
+    the simplex constraint space.
+    """
+
     def __init__(
         self,
         params: Iterable[nn.parameter.Parameter],
@@ -38,7 +41,6 @@ class SimplexProjectedAdam(Adam):
         differentiable: bool = False,
         fused: Optional[bool] = None,
     ):
-        """TODO"""
         super().__init__(
             params,
             lr=lr,
@@ -69,14 +71,7 @@ class SimplexProjectedAdam(Adam):
         # A single group; a single parameter
         qTcondX = self.param_groups[0]["params"][0]
         V = qTcondX.clone().detach().reshape(self.Xcardinal, self.Tcardinal)
-        # og_shape = q.shape
-        # q = q.view((Xcardinal, Tcardinal))
         V_projected = self._project_onto_prob_simplex(V).to(dtype=torch.float32)
-        # q = (
-        #     project_onto_prob_simplex(q)
-        #     .reshape(og_shape)
-        #     .to(dtype=torch.float32)
-        # )
         qTcondX.data = V_projected.reshape(qTcondX.shape)
 
     def _project_onto_prob_simplex(self, V):

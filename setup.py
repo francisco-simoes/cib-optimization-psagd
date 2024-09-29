@@ -7,7 +7,7 @@ with open("requirements.txt") as fp:
     install_requires = fp.read()
 
 setuptools.setup(
-    name="pgd-optim",
+    name="pgd_optim_pytorch",
     version="0.1",
     author="",
     description="Optimization of the CIB using pGD and pSAGD.",

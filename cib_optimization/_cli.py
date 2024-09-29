@@ -1,3 +1,6 @@
+"""Set up the command-line interface (CLI) for the optimization script."""
+
+
 import argparse
 from typing import Any
 

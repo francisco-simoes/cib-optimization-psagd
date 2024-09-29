@@ -46,6 +46,10 @@ pipenv install
 
 ### Using Pip
 ```bash
+pip install .
+```
+or
+```bash
 pip install -r requirements.txt
 ```
 
@@ -89,9 +93,17 @@ cib-optimization-psagd
 MLflow will track the runs.
 It will need to run in the background whenever one wants to run an optimizer using `optimize_cib.py`.
 To run MLflow:
+
+### If you use pipenv
 ``` sh
 pipenv run mlflow ui
 ```
+
+### If you use pip
+``` sh
+mlflow ui
+```
+
 This command will output the URL you can use to interact with the MLflow UI.
 
 ### Learning an encoder for one of the experiments' models

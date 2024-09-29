@@ -24,8 +24,6 @@ from data.Mutations.generate_mutations_constants import get_mutations_constants
 from data.OddAndEven.generate_odd_and_even_constants import \
     get_odd_and_even_constants
 
-# torch.autograd.set_detect_anomaly(True)  # Catch nans
-
 # === Defaults ===
 # Stopping conditions and learning rate and max norm
 EPS = 1e-5
@@ -123,9 +121,6 @@ def run_optimizer_on_confounded_addition_cib(
     monitor_iteration(iteration, optimizer, loss, diff_q, diff_loss, components)
     iteration += 1
 
-    # while iteration < MAX_ITER and (
-    #     optimizer.sa_worked or diff_q > eps
-    # ):  # Stop if non-SA step is small OR max iter reached
     while iteration < MAX_ITER and (
         (hasattr(optimizer, "sa_worked") and optimizer.sa_worked) or diff_q > eps
     ):
@@ -409,7 +404,6 @@ if __name__ == "__main__":
     # Log metrics
     mlflow.log_metric("converged", converged)
     mlflow.log_metric("Final CIB loss", loss.item())
-    # mlflow.log_metric("Number of Iterations", iteration)
     mlflow.log_metric("Expected optimal CIB loss", theoretically_optimal_cib)
     mlflow.log_metric("VI of T and T_", VI)
     mlflow.log_metric("Expected optimal HT", theoretically_optimal_components["HT"])

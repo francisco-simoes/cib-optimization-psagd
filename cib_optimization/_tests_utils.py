@@ -4,7 +4,7 @@ import torch
 from scipy.stats import entropy
 from torch import Tensor
 
-from _conversion_utils import rvs_einsum
+from _probability_utils import rvs_einsum
 
 
 def variation_of_information_of_abstractions(qTcondX, qRcondX, pX, NTs, NRs, NXs):

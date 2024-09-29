@@ -1,13 +1,9 @@
 /_todos.org
 /.projectile
 /.mypy_cache
-/mlruns/
-/tests/Results/ConfoundedAddition/.ipynb_checkpoints/*.ipynb
-/tests/Results/OddEven/.ipynb_checkpoints/*.html
-/tests/_experiments_log.org
-/tests/.mypy_cache
-/tests/.ipynb_checkpoints
-/tests/__pycache__
+/cib_optimization/_experiments_log.org
+/cib_optimization/.mypy_cache
+/cib_optimization/__pycache__
 /build
-/pgd_optim.egg-info
+**/*.egg-info
 **/.ipynb_checkpoints/

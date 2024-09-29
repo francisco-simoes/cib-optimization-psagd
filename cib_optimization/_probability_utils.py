@@ -1,3 +1,5 @@
+"""Useful function to manipulate probability distributions/tensors."""
+
 import numpy as np
 import torch
 from torch import Tensor
@@ -81,24 +83,45 @@ def rvs_einsum(
     final_rvs_indices: str,
     var_numbers: dict[str, int],
 ) -> Tensor:
-    """Perform einsum operation on arrays indexed by random vectors/variables.
+    """
+    Perform an Einstein summation operation on tensors indexed by random vectors.
 
-    #     A random vector is represented by a single letter such as "x".
-    #     So if one wants to do "x1 x2 z1, x1 x2 t1 -> z1 t1", one can just represent
-    #     it by "xz,xt->zt", which here means tensors_rvs_indices = ("xz", "xt"),
-    #     and final_rvs_indices = "zt".
+    This function enables the computation of einsum operations over tensors
+    whose indices can be grouped in different types, represented by
+    single letters (e.g., "x"). This is the case, for instance, when the
+    indices correspond to random vectors.
+    For example, to compute the einsum operation represented by:
+        x1 x2 z1, x1 x2 t1 -> z1 t1
+    you can express it using:
+        "xz,xt->zt"
+    where `tensors_rvs_indices` would be ("xz", "xt") and
+    `final_rvs_indices` would be "zt".
 
-    #     Args:
-    #         #TODO
-    #         final_rvs_indices (str): Indices in the final result.
-    #         var_numbers (dict[str, int]): Dictionary mapping random vectors names to
-    #                                         their respective numerical sizes.
+    Args:
+        tensors (tuple[Tensor]): A tuple of tensors to be operated on.
+        tensors_rvs_indices (tuple[str]): A tuple of strings representing the
+            indices for each tensor in the einsum operation.
+        final_rvs_indices (str): A string representing the indices in the final result.
+        var_numbers (dict[str, int]): A dictionary mapping index types to
+            their respective numerical sizes.
 
-    #     Returns:
-    #         Tensor: Result of the einsum operation.
+    Returns:
+        Tensor: The result of the einsum operation, combining the input tensors
+        according to the specified indices.
 
-    #"""
+    Raises:
+        ValueError: If the provided tensor indices do not match the expected
+        shapes or if the einsum operation is not valid.
 
+    Example:
+        >>> result = rvs_einsum((t1, t2), ("xz", "xt"), "zt", {"x": 2, "z": 3, "t": 4})
+
+        This performs einsum for tensors t1, t2 with 2 x-indices, 3 z-indices
+        and 4 t-indices. In the context of probability distributions, t1 may
+        be a conditional distribution p(x|z), while t2 may be a joint
+        distribution p(x,t), for example. The result of this operation would
+        then be a tensor t3 with t3[z,t] = sum_{x} p(x|z)p(x,t).
+    """
     assert len(tensors) == len(tensors_rvs_indices)
 
     # Build dict mapping rvs to their indices

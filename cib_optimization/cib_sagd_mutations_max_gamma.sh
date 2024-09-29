@@ -2,7 +2,7 @@
 # Description: This script runs a hyperparameter search for pSAGD applied to
 # the CIB loss with gamma=1, for the Genetic Mutations experiment.
 #
-# Usage (from root directory of the repository): bash tests/cib_sagd_mutations_max_gamma.sh.
+# Usage (from root directory of the repository): bash cib-optimization/cib_sagd_mutations_max_gamma.sh.
 
 
 EXPERIMENT="mutations"
@@ -20,7 +20,7 @@ for lr in ${lr_values[@]}; do
         for temp in ${temp_values[@]}; do
                 for i in $(seq 1 $RUN_NUMBER); do
                         echo "=== Run number $i for lr=$lr and temp=$temp ==="
-                        pipenv run python tests/optimize_cib.py \
+                        pipenv run python cib-optimization/optimize_cib.py \
                                 --experiment="${EXPERIMENT}" \
                                 --optimizer_algo="${OPTIMIZER_ALGO}" \
                                 --experiment_name="${EXPERIMENT_NAME}" \
