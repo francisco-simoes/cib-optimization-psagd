@@ -23,15 +23,14 @@ Furthermore, the optimization script `cib_optimization/optimize_cib.py` can easi
 If you use this code, please cite the following paper:
 
 ```bibtex
-@article{your_paper,
-    title={Optimal Causal Representations and the Causal Information Bottleneck},
-    author={ANONYMOUS},
-    ...
-    <!-- journal={Journal Name}, -->
-    <!-- year={2024}, -->
-    <!-- volume={123}, -->
-    <!-- pages={456-789}, -->
-    <!-- doi={10.1234/yourdoi} -->
+@article{simoes2024optimal,
+      title={Optimal Causal Representations and the Causal Information Bottleneck}, 
+      author={Francisco N. F. Q. Simoes and Mehdi Dastani and Thijs van Ommen},
+      year={2024},
+      eprint={2410.00535},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2410.00535}, 
 }
 ```
 
