@@ -95,13 +95,15 @@ def simplex_uniform_sampling(n: int) -> Tensor:
 
 
 def log_metrics(loss, diff_q, diff_loss, components, iteration):
-    mlflow.log_metric("CIB loss", loss.item(), step=iteration)
+    # mlflow.log_metric("CIB loss", loss.item(), step=iteration)
+    mlflow.log_metric("loss", loss.item(), step=iteration)
     mlflow.log_metric("diff_q", diff_q, step=iteration)
     mlflow.log_metric("diff_loss", diff_loss, step=iteration)
     mlflow.log_metric("HT", components["HT"], step=iteration)
     mlflow.log_metric("HTcondX", components["HTcondX"], step=iteration)
     mlflow.log_metric("HY", components["HY"], step=iteration)
     mlflow.log_metric("HcYdoT", components["HcYdoT"], step=iteration)
+    mlflow.log_metric("HYcondT", components["HYcondT"], step=iteration)
     mlflow.log_metric("penalty", components["penalty"], step=iteration)
 
 
@@ -118,6 +120,7 @@ def monitor_iteration(
     HTcondX = components["HTcondX"]
     HY = components["HY"]
     HcYdoT = components["HcYdoT"]
+    HYcondT = components["HYcondT"]
     penalty = components["penalty"]
 
     # Print monitoring information
@@ -129,7 +132,8 @@ def monitor_iteration(
         + f"\n\n\tq: [{optimizer.param_groups[0]['params'][0]}]"
     )
     print(
-        f"\n\tHT = {HT}\n\tHTcondX = {HTcondX}\n\tHY = {HY}\n\tHcYdoT = {HcYdoT}"
+        f"\n\tHT = {HT}\n\tHTcondX = {HTcondX}"
+        + f"\n\tHY = {HY}\n\tHcYdoT = {HcYdoT}\n\tHYcondT = {HYcondT}"
         + f"\n\tpenalty = {penalty}"
     )
 

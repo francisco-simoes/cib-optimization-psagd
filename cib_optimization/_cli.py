@@ -18,6 +18,18 @@ def create_parser(defaults: dict[str, Any]):
         help="The experiments to run. Choices are: "
         + ", ".join(possible_experiments),  # Help description including choices
     )
+
+    possible_methods = ["CIB", "IB"]
+    parser.add_argument(
+        "--method",
+        type=str,
+        required=False,
+        default=defaults["method"],
+        choices=possible_methods,
+        help="Representation learning method to use. Choices are: "
+        + ", ".join(possible_methods),  # Help description including choices
+    )
+
     possible_optimizer_algorithms = ["pGD", "pSAGD", "pAdam"]
     parser.add_argument(
         "--optimizer_algo",

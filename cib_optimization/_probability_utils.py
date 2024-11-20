@@ -78,8 +78,8 @@ def _move_dimensions_to_last(
 
 
 def rvs_einsum(
-    tensors: tuple[Tensor],
-    tensors_rvs_indices: tuple[str],
+    tensors: tuple[Tensor, ...],
+    tensors_rvs_indices: tuple[str, ...],
     final_rvs_indices: str,
     var_numbers: dict[str, int],
 ) -> Tensor:

@@ -21,6 +21,7 @@ class CIBLagrangian:
         pXcondYZ: Tensor,
         pXcondZ: Tensor,
         pYcondZ: Tensor,
+        pYcondX: Tensor,
         pYcondXZ: Tensor,
         NTs: tuple[int, ...],
         NXs: tuple[int, ...],
@@ -50,6 +51,9 @@ class CIBLagrangian:
 
         pYcondZ : Tensor
             Conditional probability distribution of Y given Z.
+
+        pYcondX: Tensor,
+            Conditional probability distribution of Y given X.
 
         pYcondXZ : Tensor
             Conditional probability distribution of Y given X and Z.
@@ -93,11 +97,19 @@ class CIBLagrangian:
         """
         if beta is None and gamma is None:
             raise ValueError("At least one of 'beta' or 'gamma' must be non-None")
+        self.var_numbers: dict[str, int] = {
+            "t": len(NTs),
+            "x": len(NXs),
+            "y": len(NYs),
+            "z": len(NZs),
+        }
         self.pX = pX
         self.pZ = pZ
+        self.pY = rvs_einsum((pYcondZ, pZ), ("yz", "z"), "y", self.var_numbers)
         self.pXcondYZ = pXcondYZ
         self.pXcondZ = pXcondZ
         self.pYcondZ = pYcondZ
+        self.pYcondX = pYcondX
         self.pYcondXZ = pYcondXZ
         self.NTs = NTs
         self.NXs = NXs
@@ -108,16 +120,10 @@ class CIBLagrangian:
         self.use_penalty = use_penalty
         self.track_terms = track_terms
         self.unflattened_shape = unflattened_shape
-        self.var_numbers: dict[str, int] = {
-            "t": len(NTs),
-            "x": len(NXs),
-            "y": len(NYs),
-            "z": len(NZs),
-        }
 
     def _compute_HT(self, qTcondX):
-        qts = rvs_einsum((qTcondX, self.pX), ("tx", "x"), "t", self.var_numbers)
-        return -rvs_einsum((qts, log_ext(qts)), ("t", "t"), "", self.var_numbers)
+        qT = rvs_einsum((qTcondX, self.pX), ("tx", "x"), "t", self.var_numbers)
+        return -rvs_einsum((qT, log_ext(qT)), ("t", "t"), "", self.var_numbers)
 
     def _compute_HY(self, qTcondX):
         pys = rvs_einsum((self.pYcondZ, self.pZ), ("yz", "z"), "y", self.var_numbers)
@@ -146,6 +152,23 @@ class CIBLagrangian:
             (qT, qydots, log_ext(qydots)), ("t", "ty", "ty"), "", self.var_numbers
         )
         return HcYdoT
+
+    def _compute_HYcondT(self, qTcondX):
+        denum = rvs_einsum((qTcondX, self.pX), ("tx", "x"), "t", self.var_numbers)
+        qYcondT = rvs_einsum(  # q(y|t) = sum_x p(y|x) q(x|t)
+            (self.pYcondX, qTcondX, self.pX, 1 / (denum + 1e-6)),
+            ("yx", "tx", "x", "t"),
+            "yt",
+            self.var_numbers,
+        )
+        qT = rvs_einsum((qTcondX, self.pX), ("tx", "x"), "t", self.var_numbers)
+        HYcondT = -rvs_einsum(
+            (qT, qYcondT, log_ext(qYcondT)),
+            ("t", "yt", "yt"),
+            "",
+            self.var_numbers,
+        )
+        return HYcondT
 
     @staticmethod
     def _log_penalty(x, epsilon=1e-8):
@@ -211,6 +234,7 @@ class CIBLagrangian:
             "HTcondX": HTcondX,
             "HY": HY,
             "HcYdoT": HcYdoT,
+            "HYcondT": self._compute_HYcondT(qTcondX),
             "penalty": penalty,
         }
 

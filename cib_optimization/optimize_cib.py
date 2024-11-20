@@ -14,6 +14,7 @@ from torch.optim.lr_scheduler import LinearLR
 
 from _cib_lagrangian import CIBLagrangian
 from _cli import create_parser
+from _ib_lagrangian import IBLagrangian
 from _tests_utils import (detect_cycling, log_metrics, monitor_iteration,
                           permute_first_indices, simplex_uniform_sampling,
                           update_history,
@@ -25,6 +26,9 @@ from data.OddAndEven.generate_odd_and_even_constants import \
     get_odd_and_even_constants
 
 # === Defaults ===
+# Method for learning representations
+METHOD = "CIB"
+
 # Stopping conditions and learning rate and max norm
 EPS = 1e-5
 MAX_ITER = 1000
@@ -144,7 +148,7 @@ def run_optimizer_on_confounded_addition_cib(
         diff_q = torch.norm(q - old_tensor)
 
         # Compute the loss and components after the update
-        loss, components = cib_lagrangian.compute_lagrangian(q)
+        loss, components = lagrangian.compute_lagrangian(q)
 
         # Update diff_loss
         new_loss = loss.item()  # Use the last computed loss
@@ -189,6 +193,7 @@ if __name__ == "__main__":
     # === CLI ===
     # Create argument parser
     defaults = {
+        "method": METHOD,
         "eps": EPS,
         "max_iter": MAX_ITER,
         "lr": LR,
@@ -206,6 +211,7 @@ if __name__ == "__main__":
 
     # Update constants with command-line argument values
     args = parser.parse_args()
+    METHOD = args.method
     EXPERIMENT = args.experiment
     OPTIMIZER_ALGO = args.optimizer_algo
     BETA = args.beta
@@ -259,6 +265,7 @@ if __name__ == "__main__":
     pXcondYZ = experiment_constants["pXcondYZ"]
     pXcondZ = experiment_constants["pXcondZ"]
     pYcondZ = experiment_constants["pYcondZ"]
+    pYcondX = experiment_constants["pYcondX"]
     pYcondXZ = experiment_constants["pYcondXZ"]
     NTs = experiment_constants["NTs"]
     NXs = experiment_constants["NXs"]
@@ -289,22 +296,46 @@ if __name__ == "__main__":
     unflattened_shape = permuted_qTcondX_0.shape
 
     # Define loss
-    cib_lagrangian = CIBLagrangian(
-        pX,
-        pZ,
-        pXcondYZ,
-        pXcondZ,
-        pYcondZ,
-        pYcondXZ,
-        NTs,
-        NXs,
-        NYs,
-        NZs,
-        beta=BETA,
-        gamma=GAMMA,
-        use_penalty=USE_PENALTY,
-        unflattened_shape=unflattened_shape,
-    )
+    if METHOD == "CIB":
+        lagrangian = CIBLagrangian(
+            pX,
+            pZ,
+            pXcondYZ,
+            pXcondZ,
+            pYcondZ,
+            pYcondX,
+            pYcondXZ,
+            NTs,
+            NXs,
+            NYs,
+            NZs,
+            beta=BETA,
+            gamma=GAMMA,
+            use_penalty=USE_PENALTY,
+            unflattened_shape=unflattened_shape,
+        )
+
+    elif METHOD == "IB":
+        lagrangian = IBLagrangian(
+            pX,
+            pZ,
+            pXcondYZ,
+            pXcondZ,
+            pYcondZ,
+            pYcondX,
+            pYcondXZ,
+            NTs,
+            NXs,
+            NYs,
+            NZs,
+            beta=BETA,
+            gamma=GAMMA,
+            use_penalty=USE_PENALTY,
+            unflattened_shape=unflattened_shape,
+        )
+
+    else:
+        raise ValueError(f"Invalid method {METHOD}.")
 
     # === Learn q ===
     (
@@ -316,7 +347,7 @@ if __name__ == "__main__":
         permuted_qTcondX_0_flat,
         EPS,
         MAX_ITER,
-        loss_func=cib_lagrangian.compute_lagrangian,
+        loss_func=lagrangian.compute_lagrangian,
         use_penalty=USE_PENALTY,
         temperature=TEMP,
         cooling_rate=COOL_RATE,
@@ -335,13 +366,14 @@ if __name__ == "__main__":
         + f"\n\n\t HT value: {components['HT']}"
         + f"\n\t HTcondX value: {components['HTcondX']}"
         + f"\n\t HcYdoT value: {components['HcYdoT']}"
-        + f"\n\tCIB value: {loss.item()}"
+        + f"\n\t HYcondT value: {components['HYcondT']}"
+        + f"\n\t{METHOD} value: {loss.item()}"
     )
 
     (
-        theoretically_optimal_cib,
+        theoretically_optimal_loss,
         theoretically_optimal_components,
-    ) = cib_lagrangian.compute_lagrangian(
+    ) = lagrangian.compute_lagrangian(
         permute_first_indices(SOL_Q, len(NTs)).reshape(-1),
     )
     print("\nGround truth for gamma=1 case:")
@@ -350,7 +382,8 @@ if __name__ == "__main__":
         + f"\n\n\t Optimal HT value: {theoretically_optimal_components['HT']}"
         + f"\n\t Optimal HTcondX value: {theoretically_optimal_components['HTcondX']}"
         + f"\n\t Optimal HcYdoT value: {theoretically_optimal_components['HcYdoT']}"
-        + f"\n\t Optimal CIB value: {theoretically_optimal_cib}"
+        + f"\n\t Optimal HYcondT value: {theoretically_optimal_components['HYcondT']}"
+        + f"\n\t T_ {METHOD} value: {theoretically_optimal_loss}"
     )
 
     VI: float = variation_of_information_of_abstractions(
@@ -361,14 +394,15 @@ if __name__ == "__main__":
     # Compute beta from gamma and vice-versa, for logging
     if GAMMA is None:
         GAMMA = BETA / (1 + BETA)
-        loss_name = "CIB"
+        loss_name = METHOD
     else:
         # Division of tensors to allow for infty
         BETA = float(torch.tensor(GAMMA) / torch.tensor(1 - GAMMA))
-        loss_name = "wCIB"
+        loss_name = "w" + METHOD
 
     # === MLflow logs ===
     mlflow.set_tag("optimizer", OPTIMIZER_ALGO)
+    mlflow.set_tag("method", METHOD)
     # If non-surjectivity penalty is used, that should be stated in the loss tag
     loss_name += "+penalty" if USE_PENALTY else ""
     mlflow.set_tag("loss", loss_name)
@@ -403,8 +437,8 @@ if __name__ == "__main__":
 
     # Log metrics
     mlflow.log_metric("converged", converged)
-    mlflow.log_metric("Final CIB loss", loss.item())
-    mlflow.log_metric("Expected optimal CIB loss", theoretically_optimal_cib)
+    mlflow.log_metric(f"Final {METHOD} loss", loss.item())
+    mlflow.log_metric(f"Expected optimal {METHOD} loss", theoretically_optimal_loss)
     mlflow.log_metric("VI of T and T_", VI)
     mlflow.log_metric("Expected optimal HT", theoretically_optimal_components["HT"])
     mlflow.log_metric(
@@ -412,6 +446,9 @@ if __name__ == "__main__":
     )
     mlflow.log_metric(
         "Expected optimal HcYdoT", theoretically_optimal_components["HcYdoT"]
+    )
+    mlflow.log_metric(
+        "Expected optimal HYcondT", theoretically_optimal_components["HYcondT"]
     )
     mlflow.log_params(
         {

@@ -52,6 +52,7 @@ def get_mutations_constants(bxi, by, bs) -> dict[str, Any]:
     pS = marginal(pXYS, xs=[S_index])
     pXcondS = conditionals(pXYS, xs=Xs_indices, cond_set=[S_index])
     pYcondS = conditionals(pXYS, xs=[Y_index], cond_set=[S_index])
+    pYcondX = conditionals(pXYS, xs=[Y_index], cond_set=Xs_indices)
     pYcondXS = conditionals(pXYS, xs=[Y_index], cond_set=Xs_indices + [S_index])
 
     pX = torch.tensor(pX, dtype=torch.float32)
@@ -59,6 +60,7 @@ def get_mutations_constants(bxi, by, bs) -> dict[str, Any]:
     pXcondYS = torch.tensor(pXcondYS, dtype=torch.float32)
     pXcondS = torch.tensor(pXcondS, dtype=torch.float32)
     pYcondS = torch.tensor(pYcondS, dtype=torch.float32)
+    pYcondX = torch.tensor(pYcondX, dtype=torch.float32)
     pYcondXS = torch.tensor(pYcondXS, dtype=torch.float32)
 
     # Ground-truth for gamma=1 case
@@ -74,6 +76,7 @@ def get_mutations_constants(bxi, by, bs) -> dict[str, Any]:
         "pXcondYZ": pXcondYS,
         "pXcondZ": pXcondS,
         "pYcondZ": pYcondS,
+        "pYcondX": pYcondX,
         "pYcondXZ": pYcondXS,
         "NTs": NTs,
         "NXs": NXs,

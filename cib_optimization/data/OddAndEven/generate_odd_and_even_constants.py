@@ -62,6 +62,7 @@ def get_odd_and_even_constants(uncertainty_y) -> dict[str, Any]:
     pXcondYZ = torch.tensor(pXcondYZ, dtype=torch.float32)
     pXcondZ = torch.tensor(pXcondZ, dtype=torch.float32)
     pYcondZ = torch.tensor(pYcondZ, dtype=torch.float32)
+    pYcondX = torch.tensor(pYcondX, dtype=torch.float32)
     pYcondXZ = torch.tensor(pYcondXZ, dtype=torch.float32)
 
     # Ground-truth for gamma=1 case
@@ -77,6 +78,7 @@ def get_odd_and_even_constants(uncertainty_y) -> dict[str, Any]:
         "pXcondYZ": pXcondYZ,
         "pXcondZ": pXcondZ,
         "pYcondZ": pYcondZ,
+        "pYcondX": pYcondX,
         "pYcondXZ": pYcondXZ,
         "NTs": NTs,
         "NXs": NXs,

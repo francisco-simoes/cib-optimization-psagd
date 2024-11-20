@@ -109,7 +109,7 @@ This command will output the URL you can use to interact with the MLflow UI.
 You can execute one optimization run using `cib_optimization/optimize_cib.py`.
 For example, to optimize the CIB with $\gamma=1.0$ for the Confounded Addition experiment using the SAGD optimizer:
 ``` sh
-pipenv run python tests/optimize_cib.py --experiment="confounded-addition" --optimizer_algo="pSAGD" --experiment_name "Default" --gamma=1.0 --r_y=0.5 --lr=1.0 --temperature=10.0 --max_iter=1000 
+pipenv run python cib_optimization/optimize_cib.py --experiment="confounded-addition" --optimizer_algo="pSAGD" --experiment_name "Default" --gamma=1.0 --r_y=0.5 --lr=1.0 --temperature=10.0 --max_iter=1000 
 ```
 Run `cib_optimization/optimize_cib.py --help` to see all the arguments accepted by the script.
 

@@ -130,6 +130,7 @@ def get_counfounded_addition_constants(r_y) -> dict[str, Any]:
     pXcondYW = conditionals(pXYW, xs=[0, 1], cond_set=[2, 3])
     # pXcondW = # already computed!
     pYcondW = conditionals(pXYW, xs=[2], cond_set=[3])
+    pYcondX = conditionals(pXYW, xs=[2], cond_set=[0, 1])
 
     # Convert all to torch #TODO make all directly in torch...
     # pX = torch.tensor(pX, dtype=torch.float32)
@@ -138,6 +139,7 @@ def get_counfounded_addition_constants(r_y) -> dict[str, Any]:
     pXcondYW = torch.tensor(pXcondYW, dtype=torch.float32)
     pXcondW = torch.tensor(pXcondW, dtype=torch.float32)
     pYcondW = torch.tensor(pYcondW, dtype=torch.float32)
+    pYcondX = torch.tensor(pYcondX, dtype=torch.float32)
 
     # Ground-truth for gamma=1 case
     # fmt:off
@@ -156,6 +158,7 @@ def get_counfounded_addition_constants(r_y) -> dict[str, Any]:
         "pXcondYZ": pXcondYW,
         "pXcondZ": pXcondW,
         "pYcondZ": pYcondW,
+        "pYcondX": pYcondX,
         "pYcondXZ": pYcondXW,
         "NTs": NTs,
         "NXs": NXs,
