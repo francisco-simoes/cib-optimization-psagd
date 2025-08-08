@@ -1,6 +1,6 @@
 # Learning Optimal Causal Representations by Minimizing the CIB
 
-*Code for the paper: Optimal Causal Representations and the Causal Information Bottleneck*
+*Code for the paper: The Causal Information Bottleneck and Optimal Causal Variable Abstractions*
 
 We apply (simplex) projected gradient descent (pGD) and (simplex) projected simulated annealing gradient descent (pSAGD) to find the minima of the Causal Information Bottleneck (CIB) Lagrangian, for three experiments of increasing complexity, called "Odd and Even", "Confounded Addition", and "Genetic Mutations".
 The learned minima are encoders for the optimal causal representations.
@@ -24,7 +24,7 @@ If you use this code, please cite the following paper:
 
 ```bibtex
 @article{simoes2024optimal,
-      title={Optimal Causal Representations and the Causal Information Bottleneck}, 
+      title={The Causal Information Bottleneck and Optimal Causal Variable Abstractions}, 
       author={Francisco N. F. Q. Simoes and Mehdi Dastani and Thijs van Ommen},
       year={2024},
       eprint={2410.00535},

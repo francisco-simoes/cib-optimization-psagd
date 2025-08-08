@@ -20,7 +20,7 @@ for lr in ${lr_values[@]}; do
         for temp in ${temp_values[@]}; do
                 for i in $(seq 1 $RUN_NUMBER); do
                         echo "=== Run number $i for lr=$lr and temp=$temp ==="
-                        pipenv run python cib-optimization/optimize_cib.py \
+                        pipenv run python cib_optimization/optimize_cib.py \
                                 --experiment="${EXPERIMENT}" \
                                 --optimizer_algo="${OPTIMIZER_ALGO}" \
                                 --experiment_name="${EXPERIMENT_NAME}" \

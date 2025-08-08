@@ -46,12 +46,18 @@ GAMMA = None
 USE_PENALTY = False
 
 # Experiments' parameters
-R_Y = 0.1
-UNCERTAINTY_Y = 0.1
-# BXi = 0.5
+R_Y = 0.5
+
+UNCERTAINTY_Y = 0.2
+
 BXi = 0.3
+# BXi = 0.5
+
 BY = 0.1
+# BY = 0.4
+
 BS = 0.5
+# BS = 0.8
 
 # MLflow
 EXPERIMENT_NAME = "Default"

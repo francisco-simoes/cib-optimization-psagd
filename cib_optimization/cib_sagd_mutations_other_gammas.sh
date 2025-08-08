@@ -6,7 +6,8 @@
 
 EXPERIMENT="mutations"
 OPTIMIZER_ALGO="pSAGD"
-EXPERIMENT_NAME="Mutations - other gammas"
+# EXPERIMENT_NAME="Mutations - other gammas"
+EXPERIMENT_NAME="Mutations - other noises" # the b_V need to be edited in the optimization script!
 TEMP=10.0
 COOL_RATE=0.99
 MAX_ITER=1000
@@ -20,7 +21,7 @@ for gamma in ${gammas[@]}; do
     for lr in ${lr_values[@]}; do
         for i in $(seq 1 $HALF_ENSEMBLE_SIZE); do
             echo "=== Run number $i, gamma=$gamma, lr=$lr ==="
-            pipenv run python cib-optimization/optimize_cib.py \
+            pipenv run python cib_optimization/optimize_cib.py \
                 --experiment="${EXPERIMENT}" \
                 --optimizer_algo="${OPTIMIZER_ALGO}" \
                 --experiment_name="${EXPERIMENT_NAME}" \

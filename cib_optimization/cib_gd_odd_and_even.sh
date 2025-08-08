@@ -20,7 +20,7 @@ for uncertainty_y in ${uncertainty_y_values}; do
         for lr in ${lr_values[@]}; do
             for i in $(seq 1 $HALF_ENSEMBLE_SIZE); do
                 echo "=== Running number $i for gamma=${gamma}, uncertainty_Y=${uncertainty_y}, lr=$lr"
-                pipenv run python cib-optimization/optimize_cib.py \
+                pipenv run python cib_optimization/optimize_cib.py \
                     --experiment="${EXPERIMENT}" \
                     --optimizer_algo="${OPTIMIZER_ALGO}" \
                     --experiment_name="${EXPERIMENT_NAME}" \

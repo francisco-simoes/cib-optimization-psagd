@@ -22,7 +22,7 @@ for ry in ${ry_values[@]}; do
         for lr in ${lr_values[@]}; do
             for i in $(seq 1 $HALF_ENSEMBLE_SIZE); do
                 echo "=== Run number $i for ry=$ry, gamma=$gamma, lr=$lr ==="
-                pipenv run python cib-optimization/optimize_cib.py \
+                pipenv run python cib_optimization/optimize_cib.py \
                     --experiment="${EXPERIMENT}" \
                     --optimizer_algo="${OPTIMIZER_ALGO}" \
                     --experiment_name="${EXPERIMENT_NAME}" \
